@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    /* Premium Dark Theme - Blue & Gold Accents */
+    --background: 222 41% 7%;
+    --foreground: 0 0% 100%;
+
+    --card: 222 41% 12%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 222 41% 12%;
+    --popover-foreground: 0 0% 100%;
+
+    /* Blue Primary (CTA primario) */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 217 91% 53%;
+
+    /* Gold Accent (CTA secundario) */
+    --accent: 42 75% 61%;
+    --accent-foreground: 222 41% 7%;
+    --accent-glow: 43 82% 46%;
+
+    --secondary: 222 41% 12%;
+    --secondary-foreground: 220 25% 85%;
+
+    --muted: 222 41% 15%;
+    --muted-foreground: 215 12% 65%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 100% / 0.08;
+    --input: 0 0% 100% / 0.08;
+    --ring: 217 91% 60%;
+
+    --radius: 0.75rem;
+
+    /* Custom Premium Variables */
+    --glass-bg: 222 41% 12% / 0.9;
+    --glass-border: 0 0% 100% / 0.08;
+    --gradient-primary: linear-gradient(135deg, hsl(217, 91%, 60%), hsl(217, 91%, 53%));
+    --gradient-gold: linear-gradient(135deg, hsl(42, 75%, 61%), hsl(43, 82%, 46%));
+    --gradient-dark: linear-gradient(180deg, hsl(222, 41%, 7%), hsl(222, 41%, 12%));
+    --shadow-glow-blue: 0 0 40px hsl(217 91% 60% / 0.25);
+    --shadow-glow-gold: 0 0 40px hsl(42 75% 61% / 0.25);
+    --shadow-premium: 0 25px 50px -12px hsl(0 0% 0% / 0.5);
+
+    /* Sidebar */
+    --sidebar-background: 222 41% 12%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 41% 15%;
+    --sidebar-accent-foreground: 220 25% 85%;
+    --sidebar-border: 0 0% 100% / 0.08;
+    --sidebar-ring: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/50;
+  }
+}
+
+@layer components {
+  /* Glass morphism - Dark theme */
+  .glass {
+    @apply bg-card/80 backdrop-blur-xl border border-border shadow-sm;
+  }
+
+  .glass-strong {
+    @apply bg-card/95 backdrop-blur-2xl border border-border shadow-md;
+  }
+
+  /* Premium buttons */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground font-semibold px-6 py-3 rounded-lg
+           shadow-lg transition-all duration-300 hover:shadow-glow-blue
+           hover:scale-105 active:scale-95 hover:bg-primary-glow;
+  }
+
+  .btn-gold {
+    @apply bg-gradient-to-r from-accent to-accent-glow text-accent-foreground 
+           font-semibold px-6 py-3 rounded-lg shadow-lg transition-all duration-300
+           hover:shadow-glow-gold hover:scale-105 active:scale-95;
+  }
+
+  .btn-glass {
+    @apply bg-card/80 backdrop-blur-xl border border-border px-6 py-3 rounded-lg font-medium transition-all duration-300
+           hover:bg-muted hover:border-primary/50 shadow-sm text-foreground;
+  }
+
+  /* Card premium */
+  .card-premium {
+    @apply bg-card rounded-2xl p-6 transition-all duration-500 border border-border shadow-md
+           hover:border-primary/30 hover:shadow-glow-blue;
+  }
+
+  /* Gradient text */
+  .text-gradient-blue {
+    @apply bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent;
+  }
+
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-accent to-accent-glow bg-clip-text text-transparent;
+  }
+
+  /* Glow effects */
+  .glow-blue {
+    box-shadow: var(--shadow-glow-blue);
+  }
+
+  .glow-gold {
+    box-shadow: var(--shadow-glow-gold);
+  }
+
+  /* Section spacing */
+  .section {
+    @apply py-20 md:py-28 px-4;
+  }
+
+  /* Container */
+  .container-custom {
+    @apply max-w-7xl mx-auto;
+  }
+
+  /* Floating buttons base */
+  .floating-btn {
+    @apply fixed z-50 rounded-full shadow-2xl transition-all duration-300
+           hover:scale-110 active:scale-95;
+  }
+}
+
+@layer utilities {
+  /* Shadow utilities */
+  .shadow-glow-blue {
+    box-shadow: var(--shadow-glow-blue);
+  }
+
+  .shadow-glow-gold {
+    box-shadow: var(--shadow-glow-gold);
+  }
+
+  .shadow-premium {
+    box-shadow: var(--shadow-premium);
+  }
+
+  /* Animation delays */
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+
+  /* Process step progress ring animation */
+  .group:hover .group-hover\:stroke-dashoffset-0 {
+    stroke-dashoffset: 0 !important;
+  }
+}
