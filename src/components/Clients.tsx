@@ -38,9 +38,13 @@ export const Clients = () => {
   const [isPaused, setIsPaused] = useState(false);
   const { t } = useLanguage();
 
+  // Calculate animation distance based on client count and size
+  const mobileSliderWidth = clients.length * (128 + 24); // w-32 (128px) + gap-6 (24px)
+  const desktopSliderWidth = clients.length * (240 + 40); // w-60 (240px) + gap-10 (40px)
+
   return (
-    <section className="py-16 md:py-24 overflow-hidden border-y border-background">
-      <div className="container-custom mb-12">
+    <section className="py-12 md:py-24 overflow-hidden border-y border-background">
+      <div className="container-custom mb-8 md:mb-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -48,35 +52,36 @@ export const Clients = () => {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <span className="text-sm text-primary font-medium tracking-wider uppercase mb-4 block">
+          <span className="text-xs sm:text-sm text-primary font-medium tracking-wider uppercase mb-3 sm:mb-4 block">
             {t('clients.badge')}
           </span>
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">
             {t('clients.title')} <span className="text-gradient-blue">{t('clients.titleHighlight')}</span>
           </h2>
         </motion.div>
       </div>
 
-      <div className="relative" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
+      {/* Desktop: Infinite slider */}
+      <div className="hidden md:block relative" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
         <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
         <motion.div
-          className="flex gap-6 md:gap-10"
-          animate={{ x: isPaused ? undefined : [0, -2800] }}
-          transition={{ x: { duration: 40, repeat: Infinity, ease: 'linear' } }}
+          className="flex gap-10"
+          animate={{ x: isPaused ? undefined : [0, -desktopSliderWidth] }}
+          transition={{ x: { duration: 30, repeat: Infinity, ease: 'linear' } }}
         >
           {[...clients, ...clients, ...clients].map((client, index) => (
             <a
-              key={`${client.id}-${index}`}
+              key={`desktop-${client.id}-${index}`}
               href={client.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-shrink-0 w-48 md:w-60 h-16 md:h-20 flex items-center justify-center px-4 py-2 transition-all duration-300 hover:scale-105"
+              className="flex-shrink-0 w-60 h-20 flex items-center justify-center px-4 py-2 transition-all duration-300 hover:scale-105"
               aria-label={`Visit ${client.name}`}
             >
-              <img 
-                src={client.logo} 
+              <img
+                src={client.logo}
                 alt={client.name}
                 className="max-w-full max-h-full object-contain rounded-lg filter brightness-100 hover:brightness-110 transition-all"
               />
@@ -85,26 +90,33 @@ export const Clients = () => {
         </motion.div>
       </div>
 
-      {/* Mobile grid fallback */}
-      <div className="container-custom mt-8 md:hidden">
-        <div className="grid grid-cols-2 gap-4">
-          {clients.map((client) => (
+      {/* Mobile: Animated infinite slider */}
+      <div className="md:hidden relative overflow-hidden">
+        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+
+        <motion.div
+          className="flex gap-6"
+          animate={{ x: [0, -mobileSliderWidth] }}
+          transition={{ x: { duration: 20, repeat: Infinity, ease: 'linear' } }}
+        >
+          {[...clients, ...clients, ...clients].map((client, index) => (
             <a
-              key={client.id}
+              key={`mobile-${client.id}-${index}`}
               href={client.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="h-16 flex items-center justify-center px-4 py-2 transition-all duration-300"
+              className="flex-shrink-0 w-32 h-12 flex items-center justify-center transition-all duration-300"
               aria-label={`Visit ${client.name}`}
             >
-              <img 
-                src={client.logo} 
+              <img
+                src={client.logo}
                 alt={client.name}
                 className="max-w-full max-h-full object-contain rounded-lg"
               />
             </a>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
