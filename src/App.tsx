@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LanguageLayout } from "@/components/LanguageLayout";
 import { LanguageRedirect } from "@/components/LanguageRedirect";
 import Index from "./pages/Index";
@@ -53,9 +53,12 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Handle /index.html redirect */}
+          <Route path="/index.html" element={<Navigate to="/" replace />} />
+
           {/* Root redirect to language-prefixed route */}
           <Route path="/" element={<LanguageLayout><LanguageRedirect /></LanguageLayout>} />
-          
+
           {/* Spanish Routes */}
           <Route path="/es" element={<LanguageLayout />}>
             <Route index element={<Index />} />
@@ -66,7 +69,7 @@ const App = () => (
               <Route key={`es-legacy-${route.path}`} path={route.path} element={route.element} />
             ))}
           </Route>
-          
+
           {/* English Routes */}
           <Route path="/en" element={<LanguageLayout />}>
             <Route index element={<Index />} />
@@ -77,7 +80,7 @@ const App = () => (
               <Route key={`en-legacy-${route.path}`} path={route.path} element={route.element} />
             ))}
           </Route>
-          
+
           {/* Catch-all for 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
