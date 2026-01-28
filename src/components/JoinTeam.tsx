@@ -138,45 +138,57 @@ export const JoinTeam = () => {
 
       {/* Application Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>{t('joinTeam.modal.title')} {selectedPosition}</DialogTitle>
-            <DialogDescription>
+        <DialogContent className="w-[95vw] max-w-md mx-auto max-h-[90vh] overflow-hidden flex flex-col p-4 sm:p-6">
+          <DialogHeader className="flex-shrink-0 pb-2">
+            <DialogTitle className="text-lg sm:text-xl">{t('joinTeam.modal.title')} {selectedPosition}</DialogTitle>
+            <DialogDescription className="text-sm">
               {t('joinTeam.modal.subtitle')}
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">{t('joinTeam.form.name')}</Label>
-              <Input id="name" placeholder={t('joinTeam.form.namePlaceholder')} required />
+          <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 pr-1">
+            {/* Row 1: Name & Email on desktop, stacked on mobile */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="name" className="text-sm">{t('joinTeam.form.name')}</Label>
+                <Input id="name" placeholder={t('joinTeam.form.namePlaceholder')} required className="h-9 sm:h-10" />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="email" className="text-sm">{t('joinTeam.form.email')}</Label>
+                <Input id="email" type="email" placeholder={t('joinTeam.form.emailPlaceholder')} required className="h-9 sm:h-10" />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">{t('joinTeam.form.email')}</Label>
-              <Input id="email" type="email" placeholder={t('joinTeam.form.emailPlaceholder')} required />
+            {/* Row 2: Phone & City on desktop, stacked on mobile */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="phone" className="text-sm">{t('joinTeam.form.phone')}</Label>
+                <Input id="phone" type="tel" placeholder={t('joinTeam.form.phonePlaceholder')} required className="h-9 sm:h-10" />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="city" className="text-sm">{t('joinTeam.form.city')}</Label>
+                <Input id="city" placeholder={t('joinTeam.form.cityPlaceholder')} required className="h-9 sm:h-10" />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="phone">{t('joinTeam.form.phone')}</Label>
-              <Input id="phone" type="tel" placeholder={t('joinTeam.form.phonePlaceholder')} required />
+            {/* LinkedIn */}
+            <div className="space-y-1.5">
+              <Label htmlFor="linkedin" className="text-sm">{t('joinTeam.form.linkedin')}</Label>
+              <Input id="linkedin" placeholder={t('joinTeam.form.linkedinPlaceholder')} className="h-9 sm:h-10" />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="city">{t('joinTeam.form.city')}</Label>
-              <Input id="city" placeholder={t('joinTeam.form.cityPlaceholder')} required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="linkedin">{t('joinTeam.form.linkedin')}</Label>
-              <Input id="linkedin" placeholder={t('joinTeam.form.linkedinPlaceholder')} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="message">{t('joinTeam.form.message')}</Label>
+            {/* Message */}
+            <div className="space-y-1.5">
+              <Label htmlFor="message" className="text-sm">{t('joinTeam.form.message')}</Label>
               <Textarea
                 id="message"
                 placeholder={t('joinTeam.form.messagePlaceholder')}
-                rows={4}
+                rows={3}
+                className="min-h-[80px] sm:min-h-[100px] resize-none"
               />
             </div>
-            <Button type="submit" className="w-full">
-              {t('joinTeam.form.submit')}
-            </Button>
+            {/* Submit Button */}
+            <div className="pt-2 pb-1">
+              <Button type="submit" className="w-full h-10 sm:h-11">
+                {t('joinTeam.form.submit')}
+              </Button>
+            </div>
           </form>
         </DialogContent>
       </Dialog>

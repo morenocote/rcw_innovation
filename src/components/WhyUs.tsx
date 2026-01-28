@@ -30,6 +30,9 @@ export const WhyUs = () => {
     };
   });
 
+  const descriptionDesktop = t('whyUs.descriptionDesktop');
+  const descriptionMobile = t('whyUs.descriptionMobile');
+
   return (
     <section id="por-que-nosotros" className="section relative overflow-hidden bg-card/30">
       <div className="container-custom" ref={ref}>
@@ -38,35 +41,42 @@ export const WhyUs = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 md:mb-16"
         >
           <span className="text-accent text-sm font-semibold tracking-wider uppercase">
             {t('whyUs.badge')}
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mt-4 mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mt-4 mb-6">
             {t('whyUs.title')}
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            {t('whyUs.subtitle')}
-          </p>
+          
+          {/* Mobile Description */}
+          <div className="md:hidden text-muted-foreground max-w-xl mx-auto text-sm sm:text-base leading-relaxed whitespace-pre-line px-2">
+            {descriptionMobile}
+          </div>
+          
+          {/* Desktop Description */}
+          <div className="hidden md:block text-muted-foreground max-w-4xl mx-auto text-base lg:text-lg leading-relaxed whitespace-pre-line text-left">
+            {descriptionDesktop}
+          </div>
         </motion.div>
 
         {/* Reasons Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-12 md:mb-20">
           {reasons.map((reason, index) => (
             <motion.div
               key={reason.title}
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="flex gap-4 p-6 rounded-2xl border border-border/30 bg-card/50 hover:border-accent/30 transition-all duration-300"
+              className="flex flex-col sm:flex-row gap-2 sm:gap-4 p-3 sm:p-4 md:p-6 rounded-xl md:rounded-2xl border border-border/30 bg-card/50 hover:border-accent/30 transition-all duration-300"
             >
-              <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                <reason.icon className="w-6 h-6 text-accent" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+                <reason.icon className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />
               </div>
               <div>
-                <h3 className="font-semibold mb-2">{reason.title}</h3>
-                <p className="text-sm text-muted-foreground">{reason.description}</p>
+                <h3 className="font-semibold text-sm sm:text-base mb-1 sm:mb-2">{reason.title}</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{reason.description}</p>
               </div>
             </motion.div>
           ))}
@@ -78,31 +88,31 @@ export const WhyUs = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <h3 className="text-2xl font-bold text-center mb-10">
+          <h3 className="text-xl sm:text-2xl font-bold text-center mb-6 md:mb-10">
             {t('whyUs.testimonials.title')}
           </h3>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
             {testimonials.map((testimonial, index) => (
               <motion.blockquote
                 key={testimonial.name}
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                className="card-premium"
+                className="card-premium p-4 sm:p-6"
               >
                 {/* Stars */}
-                <div className="flex gap-1 mb-4">
+                <div className="flex gap-1 mb-3 sm:mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-accent text-accent" />
+                    <Star key={i} className="w-3 h-3 sm:w-4 sm:h-4 fill-accent text-accent" />
                   ))}
                 </div>
-                <p className="text-muted-foreground mb-6 italic">
+                <p className="text-muted-foreground mb-4 sm:mb-6 italic text-sm sm:text-base leading-relaxed">
                   "{testimonial.text}"
                 </p>
                 <footer>
                   <cite className="not-italic">
-                    <span className="font-semibold block">{testimonial.name}</span>
-                    <span className="text-sm text-muted-foreground">{testimonial.company}</span>
+                    <span className="font-semibold block text-sm sm:text-base">{testimonial.name}</span>
+                    <span className="text-xs sm:text-sm text-muted-foreground">{testimonial.company}</span>
                   </cite>
                 </footer>
               </motion.blockquote>

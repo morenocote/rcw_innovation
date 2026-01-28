@@ -80,8 +80,8 @@ export const Clients = () => {
               className="flex-shrink-0 w-60 h-20 flex items-center justify-center px-4 py-2 transition-all duration-300 hover:scale-105"
               aria-label={`Visit ${client.name}`}
             >
-              <img
-                src={client.logo}
+              <img 
+                src={client.logo} 
                 alt={client.name}
                 className="max-w-full max-h-full object-contain rounded-lg filter brightness-100 hover:brightness-110 transition-all"
               />
@@ -94,7 +94,7 @@ export const Clients = () => {
       <div className="md:hidden relative overflow-hidden">
         <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-
+        
         <motion.div
           className="flex gap-6"
           animate={{ x: [0, -mobileSliderWidth] }}
@@ -109,8 +109,8 @@ export const Clients = () => {
               className="flex-shrink-0 w-32 h-12 flex items-center justify-center transition-all duration-300"
               aria-label={`Visit ${client.name}`}
             >
-              <img
-                src={client.logo}
+              <img 
+                src={client.logo} 
                 alt={client.name}
                 className="max-w-full max-h-full object-contain rounded-lg"
               />

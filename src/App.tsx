@@ -54,7 +54,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           {/* Root redirect to language-prefixed route */}
-          <Route path="/" element={<LanguageRedirect />} />
+          <Route path="/" element={<LanguageLayout><LanguageRedirect /></LanguageLayout>} />
           
           {/* Spanish Routes */}
           <Route path="/es" element={<LanguageLayout />}>

@@ -40,11 +40,13 @@ export const Header = ({ onOpenConsultation }: HeaderProps) => {
     setIsMobileMenuOpen(false);
     
     if (isHomePage) {
-      // If on home page, just scroll to section
-      const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
+      // Small delay to allow mobile menu to close before scrolling
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
     } else {
       // If on another page, navigate to home with hash
       navigate(`${basePath}/${href}`);

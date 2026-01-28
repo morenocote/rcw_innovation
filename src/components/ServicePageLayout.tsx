@@ -166,28 +166,28 @@ export const ServicePageLayout = ({
                     </div>
                   </div>
                   
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight mb-4 sm:mb-6">
                     {title}
                   </h1>
                   
-                  <p className="text-xl text-muted-foreground mb-8">
+                  <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8">
                     {shortDescription}
                   </p>
 
-                  <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <Button 
                       onClick={() => setIsConsultationOpen(true)}
-                      className="btn-gold gap-2 text-lg py-6"
+                      className="btn-gold gap-2 text-sm sm:text-base md:text-lg py-5 sm:py-6 w-full sm:w-auto"
                     >
-                      <Calendar className="w-5 h-5" />
+                      <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
                       {t('servicePage.requestAdvisory')}
                     </Button>
                     <Button 
                       onClick={() => setIsDiagnosticOpen(true)}
                       variant="outline"
-                      className="gap-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground py-6"
+                      className="gap-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground py-5 sm:py-6 text-sm sm:text-base w-full sm:w-auto"
                     >
-                      <Zap className="w-5 h-5" />
+                      <Zap className="w-4 h-4 sm:w-5 sm:h-5" />
                       {t('servicePage.consulting')}
                     </Button>
                   </div>
@@ -693,7 +693,7 @@ export const ServicePageLayout = ({
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                   >
                     <Link
-                      to={service.href}
+                      to={getLocalizedPath(service.href)}
                       className="block glass p-6 rounded-2xl hover:border-primary/30 transition-all duration-300 group"
                     >
                       <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
