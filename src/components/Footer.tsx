@@ -1,6 +1,7 @@
 import { Facebook, Instagram, Linkedin, Phone, Mail, Youtube } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { serviceRoutes, sectionRoutes } from '@/config/routes';
 
 const TikTokIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -27,31 +28,37 @@ const socialLinks = [
 ];
 
 export const Footer = () => {
-  const { t, getLocalizedPath } = useLanguage();
+  const { t, language } = useLanguage();
+
+  // Get localized service paths
+  const getServicePath = (key: string) => {
+    const route = serviceRoutes.find(r => r.key === key);
+    return route ? `/${language}/${route[language]}` : `/${language}`;
+  };
 
   const footerLinks = {
     servicios: [
-      { label: t('footer.service.1'), href: getLocalizedPath('/diseno-software-medida-premium-calgary') },
-      { label: t('footer.service.2'), href: getLocalizedPath('/diseno-web-app-movil-calgary') },
-      { label: t('footer.service.3'), href: getLocalizedPath('/automatizaciones-ia-operaciones-calgary') },
-      { label: t('footer.service.4'), href: getLocalizedPath('/agentes-ia-avanzados-calgary') },
+      { label: t('footer.service.1'), href: getServicePath('software') },
+      { label: t('footer.service.2'), href: getServicePath('webApp') },
+      { label: t('footer.service.3'), href: getServicePath('automatizaciones') },
+      { label: t('footer.service.4'), href: getServicePath('agentesIAAvanzados') },
     ],
     empresa: [
-      { label: t('footer.link.about'), href: getLocalizedPath('/#por-que-nosotros') },
-      { label: t('footer.link.process'), href: getLocalizedPath('/#proceso') },
-      { label: t('footer.link.faq'), href: getLocalizedPath('/#faq') },
-      { label: t('footer.link.contact'), href: getLocalizedPath('/#contacto') },
+      { label: t('footer.link.about'), href: `/${language}/${sectionRoutes.whyUs[language]}` },
+      { label: t('footer.link.process'), href: `/${language}/${sectionRoutes.process[language]}` },
+      { label: t('footer.link.faq'), href: `/${language}/${sectionRoutes.faq[language]}` },
+      { label: t('footer.link.contact'), href: `/${language}/${sectionRoutes.contact[language]}` },
     ],
     legal: [
-      { label: t('footer.link.privacy'), href: getLocalizedPath('/politica-privacidad') },
-      { label: t('footer.link.terms'), href: getLocalizedPath('/terminos-servicio') },
+      { label: t('footer.link.privacy'), href: `/${language}/${sectionRoutes.privacy[language]}` },
+      { label: t('footer.link.terms'), href: `/${language}/${sectionRoutes.terms[language]}` },
     ],
   };
 
   return (
     <footer className="border-t border-border/30 bg-card/30">
-      <div className="container-custom py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+      <div className="container-custom py-12 sm:py-16">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
           <div>
             <a href="#" className="flex items-center gap-3 mb-6">
               <img src={logo} alt="RCW Innovation Inc Logo" className="h-10 w-10 object-contain" />
@@ -80,7 +87,9 @@ export const Footer = () => {
             <h4 className="font-semibold mb-4">{t('footer.services')}</h4>
             <ul className="space-y-3">
               {footerLinks.servicios.map((link) => (
-                <li key={link.label}><a href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">{link.label}</a></li>
+                <li key={link.label}>
+                  <a href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">{link.label}</a>
+                </li>
               ))}
             </ul>
           </div>
@@ -89,7 +98,9 @@ export const Footer = () => {
             <h4 className="font-semibold mb-4">{t('footer.company')}</h4>
             <ul className="space-y-3">
               {footerLinks.empresa.map((link) => (
-                <li key={link.label}><a href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">{link.label}</a></li>
+                <li key={link.label}>
+                  <a href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">{link.label}</a>
+                </li>
               ))}
             </ul>
           </div>
@@ -98,15 +109,17 @@ export const Footer = () => {
             <h4 className="font-semibold mb-4">{t('footer.legal')}</h4>
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
-                <li key={link.label}><a href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">{link.label}</a></li>
+                <li key={link.label}>
+                  <a href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">{link.label}</a>
+                </li>
               ))}
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-border/30 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} RCW Innovation Inc. {t('footer.rights')}</p>
-          <p className="text-sm text-muted-foreground">{t('footer.tagline')}</p>
+        <div className="border-t border-border/30 mt-8 sm:mt-12 pt-6 sm:pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+          <p className="text-xs sm:text-sm text-muted-foreground">© {new Date().getFullYear()} RCW Innovation Inc. {t('footer.rights')}</p>
+          <p className="text-xs sm:text-sm text-muted-foreground">{t('footer.tagline')}</p>
         </div>
       </div>
     </footer>

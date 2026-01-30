@@ -26,7 +26,7 @@ export const Hero = ({ onOpenDiagnostic, onOpenConsultation }: HeroProps) => {
   const words2 = t('hero.title.words2').split(',');
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+    <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 px-4 sm:px-6 lg:px-8">
       <div className="absolute inset-0 bg-gradient-radial from-primary/10 via-transparent to-transparent" />
       
       <motion.div 
@@ -136,13 +136,13 @@ export const Hero = ({ onOpenDiagnostic, onOpenConsultation }: HeroProps) => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-16"
           >
-            <button onClick={onOpenConsultation} className="btn-gold flex items-center gap-2 text-lg">
+            <button onClick={onOpenConsultation} className="btn-gold flex items-center justify-center gap-2 text-base sm:text-lg w-full sm:w-auto min-h-[48px]">
               {t('hero.cta.consultation')}
               <ArrowRight className="w-5 h-5" />
             </button>
-            <button onClick={onOpenDiagnostic} className="btn-glass flex items-center gap-2">
+            <button onClick={onOpenDiagnostic} className="btn-glass flex items-center justify-center gap-2 w-full sm:w-auto min-h-[48px]">
               <Zap className="w-5 h-5 text-primary" />
               {t('hero.cta.diagnostic')}
             </button>
@@ -152,30 +152,30 @@ export const Hero = ({ onOpenDiagnostic, onOpenConsultation }: HeroProps) => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4 }}
-            className="grid md:grid-cols-3 gap-6 mt-12"
+            className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12"
           >
-            <div className="glass p-6 rounded-2xl text-left hover:border-primary/30 transition-all duration-300">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                <Lightbulb className="w-6 h-6 text-primary" />
+            <div className="glass p-4 sm:p-6 rounded-2xl text-left hover:border-primary/30 transition-all duration-300">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-3 sm:mb-4">
+                <Lightbulb className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
               </div>
-              <h3 className="font-semibold mb-2">{t('hero.card.innovation')}</h3>
-              <p className="text-sm text-muted-foreground">{t('hero.card.innovationDesc')}</p>
+              <h3 className="font-semibold mb-1 sm:mb-2 text-sm sm:text-base">{t('hero.card.innovation')}</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground">{t('hero.card.innovationDesc')}</p>
             </div>
             
-            <div className="glass p-6 rounded-2xl text-left hover:border-accent/30 transition-all duration-300">
-              <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
-                <Target className="w-6 h-6 text-accent" />
+            <div className="glass p-4 sm:p-6 rounded-2xl text-left hover:border-accent/30 transition-all duration-300">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-3 sm:mb-4">
+                <Target className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />
               </div>
-              <h3 className="font-semibold mb-2">{t('hero.card.strategy')}</h3>
-              <p className="text-sm text-muted-foreground">{t('hero.card.strategyDesc')}</p>
+              <h3 className="font-semibold mb-1 sm:mb-2 text-sm sm:text-base">{t('hero.card.strategy')}</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground">{t('hero.card.strategyDesc')}</p>
             </div>
             
-            <div className="glass p-6 rounded-2xl text-left hover:border-primary/30 transition-all duration-300">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                <TrendingUp className="w-6 h-6 text-primary" />
+            <div className="glass p-4 sm:p-6 rounded-2xl text-left hover:border-primary/30 transition-all duration-300 sm:col-span-2 md:col-span-1">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-3 sm:mb-4">
+                <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
               </div>
-              <h3 className="font-semibold mb-2">{t('hero.card.results')}</h3>
-              <p className="text-sm text-muted-foreground">{t('hero.card.resultsDesc')}</p>
+              <h3 className="font-semibold mb-1 sm:mb-2 text-sm sm:text-base">{t('hero.card.results')}</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground">{t('hero.card.resultsDesc')}</p>
             </div>
           </motion.div>
         </div>

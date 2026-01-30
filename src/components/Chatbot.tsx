@@ -68,6 +68,18 @@ export const Chatbot = ({ onOpenConsultation }: ChatbotProps) => {
     scrollToBottom();
   }, [messages]);
 
+  // Lock body scroll when chatbot is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   // Update greeting when language changes
   useEffect(() => {
     setMessages([
@@ -175,97 +187,130 @@ export const Chatbot = ({ onOpenConsultation }: ChatbotProps) => {
         )}
       </motion.button>
 
-      {/* Chat Panel */}
+      {/* Chat Panel with Responsive Overlay */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="fixed bottom-44 right-6 w-[360px] max-w-[calc(100vw-48px)] glass-strong rounded-2xl overflow-hidden z-50 shadow-2xl"
-          >
-            {/* Header */}
-            <div className="bg-primary p-4 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-primary-foreground">{t('chatbot.title')}</h3>
-                <p className="text-xs text-primary-foreground/70">{t('chatbot.status')}</p>
-              </div>
-            </div>
-
-            {/* Messages */}
-            <div className="h-80 overflow-y-auto p-4 space-y-4">
-              {messages.map((message) => (
-                <motion.div
-                  key={message.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`flex flex-col ${message.isBot ? 'items-start' : 'items-end'}`}
+          <>
+            {/* Overlay for mobile - clicking closes chatbot */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 bg-black/40 z-40 md:hidden"
+              aria-hidden="true"
+            />
+            
+            {/* Chat Panel - Responsive */}
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="
+                fixed z-50 glass-strong rounded-2xl overflow-hidden shadow-2xl
+                flex flex-col
+                
+                /* Mobile: full-width with safe margins, anchored to bottom */
+                inset-x-3 bottom-3 max-h-[85vh]
+                
+                /* Tablet (768px+): fixed width, bottom-right corner */
+                md:inset-auto md:bottom-44 md:right-6 md:w-[420px] md:max-h-[80vh]
+                
+                /* Desktop (1024px+): slightly larger */
+                lg:w-[480px] lg:max-h-[75vh]
+              "
+            >
+              {/* Header */}
+              <div className="bg-primary p-4 flex items-center gap-3 shrink-0">
+                <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-primary-foreground" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-primary-foreground">{t('chatbot.title')}</h3>
+                  <p className="text-xs text-primary-foreground/70">{t('chatbot.status')}</p>
+                </div>
+                {/* Close button - always visible */}
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="w-8 h-8 rounded-full bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors"
+                  aria-label="Cerrar chatbot"
                 >
-                  <div
-                    className={`max-w-[85%] rounded-2xl px-4 py-3 ${
-                      message.isBot
-                        ? 'bg-muted text-foreground rounded-tl-sm'
-                        : 'bg-primary text-primary-foreground rounded-tr-sm'
-                    }`}
+                  <X className="w-4 h-4 text-primary-foreground" />
+                </button>
+              </div>
+
+              {/* Messages - scrollable area */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
+                {messages.map((message) => (
+                  <motion.div
+                    key={message.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`flex flex-col ${message.isBot ? 'items-start' : 'items-end'}`}
                   >
-                    <p className="text-sm leading-relaxed">{message.text}</p>
-                  </div>
-                  {message.hasFormLink && (
-                    <motion.button
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 }}
-                      onClick={handleOpenForm}
-                      className="mt-2 flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-full text-sm font-medium hover:bg-accent/90 transition-colors"
+                    <div
+                      className={`max-w-[85%] rounded-2xl px-4 py-3 ${
+                        message.isBot
+                          ? 'bg-muted text-foreground rounded-tl-sm'
+                          : 'bg-primary text-primary-foreground rounded-tr-sm'
+                      }`}
                     >
-                      <FileText className="w-4 h-4" />
-                      {language === 'es' ? 'Abrir Formulario de Consulta' : 'Open Consultation Form'}
-                    </motion.button>
-                  )}
-                </motion.div>
-              ))}
-              <div ref={messagesEndRef} />
-            </div>
-
-            {/* Quick Responses */}
-            <div className="px-4 pb-2 flex flex-wrap gap-2">
-              {quickResponses.map((qr) => (
-                <button
-                  key={qr.keyword}
-                  onClick={() => handleSend(qr.keyword)}
-                  className="text-xs px-3 py-1.5 rounded-full bg-muted hover:bg-muted/80 transition-colors"
-                >
-                  {qr.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Input */}
-            <div className="p-4 border-t border-border/30">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder={t('chatbot.placeholder')}
-                  className="flex-1 bg-muted rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  aria-label="Escribe tu mensaje"
-                />
-                <button
-                  onClick={() => handleSend()}
-                  className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center hover:bg-primary/90 transition-colors"
-                  aria-label="Enviar mensaje"
-                >
-                  <Send className="w-5 h-5 text-primary-foreground" />
-                </button>
+                      <p className="text-sm leading-relaxed">{message.text}</p>
+                    </div>
+                    {message.hasFormLink && (
+                      <motion.button
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        onClick={handleOpenForm}
+                        className="mt-2 flex items-center gap-2 px-4 py-2.5 min-h-[44px] bg-accent text-accent-foreground rounded-full text-sm font-medium hover:bg-accent/90 transition-colors"
+                      >
+                        <FileText className="w-4 h-4" />
+                        {language === 'es' ? 'Abrir Formulario de Consulta' : 'Open Consultation Form'}
+                      </motion.button>
+                    )}
+                  </motion.div>
+                ))}
+                <div ref={messagesEndRef} />
               </div>
-            </div>
-          </motion.div>
+
+              {/* Quick Responses - tap-friendly */}
+              <div className="px-4 pb-2 flex flex-wrap gap-2 shrink-0">
+                {quickResponses.map((qr) => (
+                  <button
+                    key={qr.keyword}
+                    onClick={() => handleSend(qr.keyword)}
+                    className="text-xs px-3 py-2 min-h-[36px] rounded-full bg-muted hover:bg-muted/80 transition-colors"
+                  >
+                    {qr.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Input - tap-friendly */}
+              <div className="p-4 border-t border-border/30 shrink-0">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder={t('chatbot.placeholder')}
+                    className="flex-1 bg-muted rounded-xl px-4 py-3 min-h-[48px] text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    aria-label="Escribe tu mensaje"
+                  />
+                  <button
+                    onClick={() => handleSend()}
+                    className="w-12 h-12 min-w-[48px] min-h-[48px] rounded-xl bg-primary flex items-center justify-center hover:bg-primary/90 transition-colors"
+                    aria-label="Enviar mensaje"
+                  >
+                    <Send className="w-5 h-5 text-primary-foreground" />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

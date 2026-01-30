@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '@/assets/logo.png';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { sectionRoutes } from '@/config/routes';
 
 interface HeaderProps {
   onOpenConsultation?: () => void;
@@ -17,13 +18,14 @@ export const Header = ({ onOpenConsultation }: HeaderProps) => {
   const navigate = useNavigate();
   const { t, language, basePath } = useLanguage();
 
+  // Navigation links - mix of SEO pages and anchors
   const navLinks = [
-    { href: '#servicios', label: t('nav.services') },
-    { href: '#proyectos', label: t('nav.projects') },
-    { href: '#por-que-nosotros', label: t('nav.whyUs') },
-    { href: '#proceso', label: t('nav.process') },
-    { href: '#faq', label: t('nav.faq') },
-    { href: '#contacto', label: t('nav.contact') },
+    { href: `/${language}/#servicios`, label: t('nav.services'), isAnchor: true, anchor: '#servicios' },
+    { href: `/${language}/${sectionRoutes.projects[language]}`, label: t('nav.projects'), isAnchor: false },
+    { href: `/${language}/${sectionRoutes.whyUs[language]}`, label: t('nav.whyUs'), isAnchor: false },
+    { href: `/${language}/${sectionRoutes.process[language]}`, label: t('nav.process'), isAnchor: false },
+    { href: `/${language}/${sectionRoutes.faq[language]}`, label: t('nav.faq'), isAnchor: false },
+    { href: `/${language}/${sectionRoutes.contact[language]}`, label: t('nav.contact'), isAnchor: false },
   ];
 
   useEffect(() => {
@@ -36,20 +38,23 @@ export const Header = ({ onOpenConsultation }: HeaderProps) => {
 
   const isHomePage = location.pathname === `/${language}` || location.pathname === `/${language}/`;
 
-  const handleNavClick = (href: string) => {
+  const handleNavClick = (link: typeof navLinks[0]) => {
     setIsMobileMenuOpen(false);
     
-    if (isHomePage) {
-      // Small delay to allow mobile menu to close before scrolling
+    if (link.isAnchor && isHomePage) {
+      // Scroll to anchor on home page
       setTimeout(() => {
-        const element = document.querySelector(href);
+        const element = document.querySelector(link.anchor || '');
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
       }, 100);
+    } else if (link.isAnchor && !isHomePage) {
+      // Navigate to home with hash
+      navigate(`${basePath}/${link.anchor}`);
     } else {
-      // If on another page, navigate to home with hash
-      navigate(`${basePath}/${href}`);
+      // Navigate to dedicated page
+      navigate(link.href);
     }
   };
 
@@ -86,7 +91,7 @@ export const Header = ({ onOpenConsultation }: HeaderProps) => {
           {navLinks.map((link) => (
             <li key={link.href}>
               <button
-                onClick={() => handleNavClick(link.href)}
+                onClick={() => handleNavClick(link)}
                 className="text-muted-foreground hover:text-foreground transition-colors duration-300 relative group text-sm font-medium bg-transparent border-none cursor-pointer"
               >
                 {link.label}
@@ -110,10 +115,10 @@ export const Header = ({ onOpenConsultation }: HeaderProps) => {
         </motion.div>
 
         {/* Mobile Menu Button + Language */}
-        <div className="lg:hidden flex items-center gap-3">
+        <div className="lg:hidden flex items-center gap-2 sm:gap-3">
           <LanguageSwitcher />
           <button
-            className="p-2 text-foreground hover:text-primary transition-colors"
+            className="p-2.5 text-foreground hover:text-primary transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label={isMobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={isMobileMenuOpen}
@@ -132,12 +137,12 @@ export const Header = ({ onOpenConsultation }: HeaderProps) => {
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <ul className="flex flex-col py-6 px-4">
+              <ul className="flex flex-col py-4 sm:py-6 px-4">
                 {navLinks.map((link, index) => (
                   <li key={link.href}>
                     <motion.button
-                      onClick={() => handleNavClick(link.href)}
-                      className="block w-full text-left py-3 text-muted-foreground hover:text-foreground transition-colors border-b border-border/30 bg-transparent cursor-pointer"
+                      onClick={() => handleNavClick(link)}
+                      className="block w-full text-left py-3.5 text-muted-foreground hover:text-foreground transition-colors border-b border-border/30 bg-transparent cursor-pointer min-h-[48px] text-base"
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
@@ -152,7 +157,7 @@ export const Header = ({ onOpenConsultation }: HeaderProps) => {
                       setIsMobileMenuOpen(false);
                       onOpenConsultation?.();
                     }}
-                    className="btn-primary block text-center w-full"
+                    className="btn-primary block text-center w-full min-h-[48px]"
                   >
                     {t('nav.cta')}
                   </button>

@@ -44,12 +44,12 @@ export const JoinTeam = () => {
   };
 
   return (
-    <section id="trabaja-con-nosotros" className="py-24 bg-muted/30 relative overflow-hidden">
+    <section id="trabaja-con-nosotros" className="py-16 sm:py-24 bg-muted/30 relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute inset-0 bg-gradient-to-t from-primary/5 via-transparent to-transparent" />
       <div className="absolute top-1/3 -right-48 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
 
-      <div className="container mx-auto px-4 relative z-10" ref={ref}>
+      <div className="container-custom relative z-10" ref={ref}>
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -60,10 +60,10 @@ export const JoinTeam = () => {
           <span className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
             {t('joinTeam.badge')}
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
             {t('joinTeam.title')} <span className="text-primary">{t('joinTeam.titleHighlight')}</span>{t('joinTeam.titleEnd')}
           </h2>
-          <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
+          <p className="text-muted-foreground text-base sm:text-lg max-w-3xl mx-auto">
             {t('joinTeam.subtitle')}
           </p>
         </motion.div>
@@ -73,18 +73,18 @@ export const JoinTeam = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-20"
         >
           {benefits.map((benefit, index) => (
             <div
               key={index}
-              className="p-6 bg-card/50 backdrop-blur-sm rounded-2xl border border-border/50 hover:border-primary/30 transition-all duration-300 group"
+              className="p-4 sm:p-6 bg-card/50 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-border/50 hover:border-primary/30 transition-all duration-300 group"
             >
-              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                <benefit.icon className="w-6 h-6 text-primary" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-lg sm:rounded-xl flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-primary/20 transition-colors">
+                <benefit.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
               </div>
-              <h3 className="font-semibold mb-2">{benefit.title}</h3>
-              <p className="text-muted-foreground text-sm">{benefit.description}</p>
+              <h3 className="font-semibold mb-1 sm:mb-2 text-sm sm:text-base">{benefit.title}</h3>
+              <p className="text-muted-foreground text-xs sm:text-sm">{benefit.description}</p>
             </div>
           ))}
         </motion.div>
@@ -94,20 +94,20 @@ export const JoinTeam = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto"
+          className="grid sm:grid-cols-2 gap-4 sm:gap-8 max-w-4xl mx-auto"
         >
           {/* General Application */}
-          <div className="p-8 bg-card/50 backdrop-blur-sm rounded-2xl border border-border/50 hover:border-primary/30 transition-all duration-300 text-center">
-            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Briefcase className="w-8 h-8 text-primary" />
+          <div className="p-5 sm:p-8 bg-card/50 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-border/50 hover:border-primary/30 transition-all duration-300 text-center">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+              <Briefcase className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
             </div>
-            <h3 className="text-xl font-semibold mb-3">{t('joinTeam.professional')}</h3>
-            <p className="text-muted-foreground text-sm mb-6">
+            <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">{t('joinTeam.professional')}</h3>
+            <p className="text-muted-foreground text-xs sm:text-sm mb-4 sm:mb-6">
               {t('joinTeam.professionalDesc')}
             </p>
             <Button
               size="lg"
-              className="w-full"
+              className="w-full min-h-[48px]"
               onClick={() => handleApply(t('joinTeam.professional'))}
             >
               {t('joinTeam.applyProfessional')}
@@ -116,17 +116,17 @@ export const JoinTeam = () => {
           </div>
 
           {/* Volunteer Application */}
-          <div className="p-8 bg-card/50 backdrop-blur-sm rounded-2xl border border-accent/30 hover:border-accent/50 transition-all duration-300 text-center">
-            <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Users className="w-8 h-8 text-accent" />
+          <div className="p-5 sm:p-8 bg-card/50 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-accent/30 hover:border-accent/50 transition-all duration-300 text-center">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+              <Users className="w-6 h-6 sm:w-8 sm:h-8 text-accent" />
             </div>
-            <h3 className="text-xl font-semibold mb-3">{t('joinTeam.volunteer')}</h3>
-            <p className="text-muted-foreground text-sm mb-6">
+            <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">{t('joinTeam.volunteer')}</h3>
+            <p className="text-muted-foreground text-xs sm:text-sm mb-4 sm:mb-6">
               {t('joinTeam.volunteerDesc')}
             </p>
             <Button
               size="lg"
-              className="w-full bg-gradient-to-r from-accent to-accent/80 hover:from-accent/90 hover:to-accent/70 text-accent-foreground shadow-glow-gold"
+              className="w-full bg-gradient-to-r from-accent to-accent/80 hover:from-accent/90 hover:to-accent/70 text-accent-foreground shadow-glow-gold min-h-[48px]"
               onClick={() => handleApply(t('joinTeam.volunteer'))}
             >
               {t('joinTeam.applyVolunteer')}

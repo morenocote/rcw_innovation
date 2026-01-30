@@ -75,6 +75,7 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
   }
 
   /* Custom scrollbar */
@@ -147,14 +148,14 @@
     box-shadow: var(--shadow-glow-gold);
   }
 
-  /* Section spacing */
+  /* Section spacing - consistent responsive */
   .section {
-    @apply py-20 md:py-28 px-4;
+    @apply py-16 sm:py-20 md:py-28 px-4 sm:px-6 lg:px-8;
   }
 
-  /* Container */
+  /* Container - consistent responsive padding */
   .container-custom {
-    @apply max-w-7xl mx-auto;
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 
   /* Floating buttons base */

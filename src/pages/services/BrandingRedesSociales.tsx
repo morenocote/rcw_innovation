@@ -14,6 +14,8 @@ import {
 import serviceBrandingSocial from '@/assets/service-branding-social.jpg';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { serviceTranslations } from '@/i18n/serviceTranslations';
+import { serviceRoutes } from '@/config/routes';
+import { serviceFeatureImages } from '@/config/featureImages';
 
 const featureIcons = [Palette, Target, FileText, TrendingUp, Users, Share2];
 
@@ -21,10 +23,17 @@ const BrandingRedesSociales = forwardRef<HTMLDivElement>((_, ref) => {
   const { language } = useLanguage();
   const t = (key: string) => serviceTranslations[language][key as keyof typeof serviceTranslations['es']] || key;
 
+  // Helper to get localized service path
+  const getServiceHref = (key: string) => {
+    const route = serviceRoutes.find(r => r.key === key);
+    return route ? `/${language}/${route[language]}` : `/${language}`;
+  };
+
   const features = Array.from({ length: 6 }, (_, i) => ({
     title: t(`branding.feature.${i + 1}.title`),
     description: t(`branding.feature.${i + 1}.description`),
     icon: featureIcons[i],
+    image: serviceFeatureImages.branding[i],
   }));
 
   const processSteps = Array.from({ length: 5 }, (_, i) => ({
@@ -38,10 +47,15 @@ const BrandingRedesSociales = forwardRef<HTMLDivElement>((_, ref) => {
   }));
 
   const relatedServices = [
-    { title: t('branding.relatedService.1'), href: '/diseno-web-app-movil-calgary', icon: Globe },
-    { title: t('branding.relatedService.2'), href: '/mentoria-capacitacion-digital-calgary', icon: GraduationCap },
-    { title: t('branding.relatedService.3'), href: '/diseno-software-medida-premium-calgary', icon: Code2 },
+    { title: t('branding.relatedService.1'), href: getServiceHref('webApp'), icon: Globe },
+    { title: t('branding.relatedService.2'), href: getServiceHref('mentoria'), icon: GraduationCap },
+    { title: t('branding.relatedService.3'), href: getServiceHref('software'), icon: Code2 },
   ];
+
+  // Canonical URL based on language
+  const canonicalUrl = language === 'es' 
+    ? 'https://www.rcwinnovation.com/es/servicios/branding-redes-sociales'
+    : 'https://www.rcwinnovation.com/en/services/branding-social-media';
 
   return (
     <div ref={ref}>
@@ -50,7 +64,7 @@ const BrandingRedesSociales = forwardRef<HTMLDivElement>((_, ref) => {
         metaTitle={t('branding.metaTitle')}
         metaDescription={t('branding.metaDescription')}
         keywords={t('branding.keywords')}
-        canonicalUrl="https://www.rcwinnovation.com/branding-estrategia-redes-sociales-calgary"
+        canonicalUrl={canonicalUrl}
         heroImage={serviceBrandingSocial}
         heroImageAlt={t('branding.heroImageAlt')}
         tag={t('branding.tag')}

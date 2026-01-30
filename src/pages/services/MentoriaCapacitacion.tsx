@@ -4,6 +4,8 @@ import { GraduationCap, Users, Video, BookOpen, Target, Award, Globe, Share2, Bo
 import serviceMentoringTraining from '@/assets/service-mentoring-training.jpg';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { serviceTranslations } from '@/i18n/serviceTranslations';
+import { serviceRoutes } from '@/config/routes';
+import { serviceFeatureImages } from '@/config/featureImages';
 
 const featureIcons = [Target, Users, BookOpen, Video, Target, Award];
 
@@ -11,10 +13,17 @@ const MentoriaCapacitacion = forwardRef<HTMLDivElement>((_, ref) => {
   const { language } = useLanguage();
   const t = (key: string) => serviceTranslations[language][key as keyof typeof serviceTranslations['es']] || key;
 
+  // Helper to get localized service path
+  const getServiceHref = (key: string) => {
+    const route = serviceRoutes.find(r => r.key === key);
+    return route ? `/${language}/${route[language]}` : `/${language}`;
+  };
+
   const features = Array.from({ length: 6 }, (_, i) => ({
     title: t(`mentoria.feature.${i + 1}.title`),
     description: t(`mentoria.feature.${i + 1}.description`),
     icon: featureIcons[i],
+    image: serviceFeatureImages.mentoria[i],
   }));
 
   const processSteps = Array.from({ length: 5 }, (_, i) => ({
@@ -28,10 +37,15 @@ const MentoriaCapacitacion = forwardRef<HTMLDivElement>((_, ref) => {
   }));
 
   const relatedServices = [
-    { title: t('mentoria.relatedService.1'), href: '/diseno-web-app-movil-calgary', icon: Globe },
-    { title: t('mentoria.relatedService.2'), href: '/branding-estrategia-redes-sociales-calgary', icon: Share2 },
-    { title: t('mentoria.relatedService.3'), href: '/automatizaciones-ia-operaciones-calgary', icon: Bot },
+    { title: t('mentoria.relatedService.1'), href: getServiceHref('webApp'), icon: Globe },
+    { title: t('mentoria.relatedService.2'), href: getServiceHref('branding'), icon: Share2 },
+    { title: t('mentoria.relatedService.3'), href: getServiceHref('automatizaciones'), icon: Bot },
   ];
+
+  // Canonical URL based on language
+  const canonicalUrl = language === 'es' 
+    ? 'https://www.rcwinnovation.com/es/servicios/mentoria-capacitacion'
+    : 'https://www.rcwinnovation.com/en/services/mentoring-training';
 
   return (
     <div ref={ref}>
@@ -40,7 +54,7 @@ const MentoriaCapacitacion = forwardRef<HTMLDivElement>((_, ref) => {
         metaTitle={t('mentoria.metaTitle')}
         metaDescription={t('mentoria.metaDescription')}
         keywords={t('mentoria.keywords')}
-        canonicalUrl="https://www.rcwinnovation.com/mentoria-capacitacion-digital-calgary"
+        canonicalUrl={canonicalUrl}
         heroImage={serviceMentoringTraining}
         heroImageAlt={t('mentoria.heroImageAlt')}
         tag={t('mentoria.tag')}

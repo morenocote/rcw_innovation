@@ -3,16 +3,28 @@ import { ServicePageLayout } from '@/components/ServicePageLayout';
 import { Database, LayoutDashboard, Users, Shield, TrendingUp, BarChart3, Bot, Code2, Brain, Award, Leaf, HardHat } from 'lucide-react';
 import { motion } from 'framer-motion';
 import serviceErpSystems from '@/assets/service-erp-systems.jpg';
+import iso9001Image from '@/assets/iso/iso-9001-quality.jpg';
+import iso14001Image from '@/assets/iso/iso-14001-environmental.jpg';
+import iso45001Image from '@/assets/iso/iso-45001-safety.jpg';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { serviceTranslations } from '@/i18n/serviceTranslations';
+import { serviceRoutes } from '@/config/routes';
+import { serviceFeatureImages } from '@/config/featureImages';
 
 const featureIcons = [LayoutDashboard, Users, Shield, TrendingUp, BarChart3, Database];
 const isoIcons = [Award, Leaf, HardHat];
 const isoColors = ['primary', 'accent', 'primary'];
+const isoImages = [iso9001Image, iso14001Image, iso45001Image];
 
 const SistemasGestion = forwardRef<HTMLDivElement>((_, ref) => {
   const { language } = useLanguage();
   const t = (key: string) => serviceTranslations[language][key as keyof typeof serviceTranslations['es']] || key;
+
+  // Helper to get localized service path
+  const getServiceHref = (key: string) => {
+    const route = serviceRoutes.find(r => r.key === key);
+    return route ? `/${language}/${route[language]}` : `/${language}`;
+  };
 
   const isoStandards = Array.from({ length: 3 }, (_, i) => ({
     icon: isoIcons[i],
@@ -20,12 +32,14 @@ const SistemasGestion = forwardRef<HTMLDivElement>((_, ref) => {
     subtitle: t(`sistemas.iso.${i + 1}.subtitle`),
     description: t(`sistemas.iso.${i + 1}.description`),
     colorClass: isoColors[i],
+    image: isoImages[i],
   }));
 
   const features = Array.from({ length: 6 }, (_, i) => ({
     title: t(`sistemas.feature.${i + 1}.title`),
     description: t(`sistemas.feature.${i + 1}.description`),
     icon: featureIcons[i],
+    image: serviceFeatureImages.sistemasGestion[i],
   }));
 
   const processSteps = Array.from({ length: 5 }, (_, i) => ({
@@ -39,10 +53,15 @@ const SistemasGestion = forwardRef<HTMLDivElement>((_, ref) => {
   }));
 
   const relatedServices = [
-    { title: t('sistemas.relatedService.1'), href: '/automatizaciones-ia-operaciones-calgary', icon: Bot },
-    { title: t('sistemas.relatedService.2'), href: '/diseno-software-medida-premium-calgary', icon: Code2 },
-    { title: t('sistemas.relatedService.3'), href: '/creacion-agentes-ia-inteligencia-calgary', icon: Brain },
+    { title: t('sistemas.relatedService.1'), href: getServiceHref('automatizaciones'), icon: Bot },
+    { title: t('sistemas.relatedService.2'), href: getServiceHref('software'), icon: Code2 },
+    { title: t('sistemas.relatedService.3'), href: getServiceHref('agentesIA'), icon: Brain },
   ];
+
+  // Canonical URL based on language
+  const canonicalUrl = language === 'es' 
+    ? 'https://www.rcwinnovation.com/es/servicios/sistemas-gestion'
+    : 'https://www.rcwinnovation.com/en/services/management-systems';
 
   return (
     <div ref={ref}>
@@ -51,7 +70,7 @@ const SistemasGestion = forwardRef<HTMLDivElement>((_, ref) => {
         metaTitle={t('sistemas.metaTitle')}
         metaDescription={t('sistemas.metaDescription')}
         keywords={t('sistemas.keywords')}
-        canonicalUrl="https://www.rcwinnovation.com/sistemas-gestion-operaciones-calgary"
+        canonicalUrl={canonicalUrl}
         heroImage={serviceErpSystems}
         heroImageAlt={t('sistemas.heroImageAlt')}
         tag={t('sistemas.tag')}
@@ -86,17 +105,30 @@ const SistemasGestion = forwardRef<HTMLDivElement>((_, ref) => {
                     className="relative group"
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${standard.colorClass === 'accent' ? 'from-accent/20 to-accent/5' : 'from-primary/20 to-primary/5'} rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500`} />
-                    <div className={`relative bg-card/80 backdrop-blur-sm p-6 lg:p-8 rounded-3xl border ${standard.colorClass === 'accent' ? 'border-accent/20 hover:border-accent/40' : 'border-primary/20 hover:border-primary/40'} h-full transition-all duration-300`}>
-                      <div className={`w-14 h-14 lg:w-16 lg:h-16 ${standard.colorClass === 'accent' ? 'bg-accent/10 group-hover:bg-accent/20' : 'bg-primary/10 group-hover:bg-primary/20'} rounded-2xl flex items-center justify-center mb-6 transition-colors`}>
-                        <standard.icon className={`w-7 h-7 lg:w-8 lg:h-8 ${standard.colorClass === 'accent' ? 'text-accent' : 'text-primary'}`} />
+                    <div className={`relative bg-card/80 backdrop-blur-sm rounded-3xl border ${standard.colorClass === 'accent' ? 'border-accent/20 hover:border-accent/40' : 'border-primary/20 hover:border-primary/40'} h-full transition-all duration-300 overflow-hidden`}>
+                      {/* ISO Image */}
+                      <div className="relative h-40 overflow-hidden">
+                        <img 
+                          src={standard.image} 
+                          alt={`${standard.title} - ${standard.subtitle}`}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
+                        <div className={`absolute bottom-4 left-6 w-12 h-12 ${standard.colorClass === 'accent' ? 'bg-accent/90' : 'bg-primary/90'} rounded-xl flex items-center justify-center shadow-lg`}>
+                          <standard.icon className="w-6 h-6 text-primary-foreground" />
+                        </div>
                       </div>
-                      <div className="mb-4">
-                        <h3 className="text-xl lg:text-2xl font-bold text-primary">{standard.title}</h3>
-                        <p className="text-sm font-medium text-muted-foreground">{standard.subtitle}</p>
+                      {/* Content */}
+                      <div className="p-6">
+                        <div className="mb-4">
+                          <h3 className="text-xl lg:text-2xl font-bold text-primary">{standard.title}</h3>
+                          <p className="text-sm font-medium text-muted-foreground">{standard.subtitle}</p>
+                        </div>
+                        <p className="text-muted-foreground leading-relaxed text-sm lg:text-base">
+                          {standard.description}
+                        </p>
                       </div>
-                      <p className="text-muted-foreground leading-relaxed text-sm lg:text-base">
-                        {standard.description}
-                      </p>
                     </div>
                   </motion.div>
                 ))}

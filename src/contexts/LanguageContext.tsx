@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { serviceRoutes, pageRoutes } from '@/config/routes';
 
 type Language = 'es' | 'en';
 
@@ -26,8 +27,8 @@ const translations = {
     'hero.badge': 'Innovación, Ingeniería y Automatización 5.0',
     'hero.title.words1': 'Impulsamos,la,innovación,,el',
     'hero.title.highlight': 'diseño web',
-    'hero.title.words2': 'y,la,automatización,inteligente,en,Calgary',
-    'hero.subtitle': 'Diseñamos soluciones de ingeniería, IA y automatización 5.0 para transformar tus procesos en resultados y potenciar la innovación empresarial en Calgary, Alberta y Canadá.',
+    'hero.title.words2': 'y,la,automatización,inteligente,en,Canadá',
+    'hero.subtitle': 'Diseñamos soluciones de ingeniería, IA y automatización 5.0 desde Calgary para empresas en todo Canadá.',
     'hero.cta.consultation': 'Solicitar Asesoría',
     'hero.cta.diagnostic': 'Consultoría 5.0',
     'hero.card.innovation': 'Innovación',
@@ -348,10 +349,10 @@ const translations = {
     
     // Hero
     'hero.badge': 'Innovation, Engineering & Automation 5.0',
-    'hero.title.words1': 'We,drive,innovation,,and',
+    'hero.title.words1': 'We,drive,innovation,,',
     'hero.title.highlight': 'web design',
-    'hero.title.words2': 'and,intelligent,automation,in,Calgary',
-    'hero.subtitle': 'We design engineering, AI and automation 5.0 solutions to transform your processes into results and boost business innovation in Calgary, Alberta and Canada.',
+    'hero.title.words2': 'and,intelligent,automation,in,Canada',
+    'hero.subtitle': 'We design engineering, AI and automation 5.0 solutions from Calgary for businesses across Canada.',
     'hero.cta.consultation': 'Request Consultation',
     'hero.cta.diagnostic': 'Consulting 5.0',
     'hero.card.innovation': 'Innovation',
@@ -704,16 +705,39 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
     document.documentElement.lang = lang;
     localStorage.setItem('language', lang);
     
-    // Navigate to the same page but with new language prefix
+    // Navigate to the translated page path
     const currentPath = location.pathname;
     let newPath: string;
     
-    if (currentPath.startsWith('/es') || currentPath.startsWith('/en')) {
-      // Replace the language prefix
-      newPath = `/${lang}${currentPath.substring(3)}`;
+    // Extract the path without language prefix
+    let pathWithoutLang = currentPath;
+    if (currentPath.startsWith('/es/')) {
+      pathWithoutLang = currentPath.substring(3); // Remove /es
+    } else if (currentPath.startsWith('/en/')) {
+      pathWithoutLang = currentPath.substring(3); // Remove /en
+    } else if (currentPath === '/es' || currentPath === '/en') {
+      pathWithoutLang = ''; // Home page
+    }
+    
+    // Try to find the translated path for service routes
+    const serviceRoute = serviceRoutes.find(
+      r => `/${r.es}` === pathWithoutLang || `/${r.en}` === pathWithoutLang
+    );
+    
+    if (serviceRoute) {
+      newPath = `/${lang}/${serviceRoute[lang]}`;
     } else {
-      // Add language prefix to root or other paths
-      newPath = `/${lang}${currentPath === '/' ? '' : currentPath}`;
+      // Try to find the translated path for page routes
+      const pageRoute = pageRoutes.find(
+        r => `/${r.es}` === pathWithoutLang || `/${r.en}` === pathWithoutLang
+      );
+      
+      if (pageRoute) {
+        newPath = `/${lang}/${pageRoute[lang]}`;
+      } else {
+        // Default: just replace the language prefix (for home or unknown routes)
+        newPath = `/${lang}${pathWithoutLang}`;
+      }
     }
     
     navigate(newPath, { replace: true });

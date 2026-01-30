@@ -1,15 +1,17 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Search, Palette, Code2, Rocket, TrendingUp } from 'lucide-react';
+import { Search, Palette, Code2, Rocket, TrendingUp, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { sectionRoutes } from '@/config/routes';
 
 const stepIcons = [Search, Palette, Code2, Rocket, TrendingUp];
 
 export const Process = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const steps = Array.from({ length: 5 }, (_, i) => {
     const num = i + 1;
@@ -38,9 +40,16 @@ export const Process = () => {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mt-4 mb-6">
             {t('process.title')}
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+          <p className="text-muted-foreground max-w-2xl mx-auto text-lg mb-6">
             {t('process.subtitle')}
           </p>
+          <Link 
+            to={`/${language}/${sectionRoutes.process[language]}`}
+            className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
+          >
+            {language === 'es' ? 'Ver proceso detallado' : 'View detailed process'}
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </motion.div>
 
         {/* Steps */}

@@ -1,14 +1,16 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { sectionRoutes } from '@/config/routes';
 
 export const FAQ = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const faqs = Array.from({ length: 9 }, (_, i) => {
     const num = i + 1;
@@ -34,9 +36,16 @@ export const FAQ = () => {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mt-4 mb-6">
             {t('faq.title')}
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+          <p className="text-muted-foreground max-w-2xl mx-auto text-lg mb-6">
             {t('faq.subtitle')}
           </p>
+          <Link 
+            to={`/${language}/${sectionRoutes.faq[language]}`}
+            className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
+          >
+            {language === 'es' ? 'Ver todas las preguntas' : 'View all questions'}
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </motion.div>
 
         {/* FAQ Items */}

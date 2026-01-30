@@ -4,6 +4,8 @@ import { CreditCard, QrCode, Smartphone, RefreshCw, Users, Share2, Globe, Code2 
 import serviceDigitalCard from '@/assets/service-digital-card.jpg';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { serviceTranslations } from '@/i18n/serviceTranslations';
+import { serviceRoutes } from '@/config/routes';
+import { serviceFeatureImages } from '@/config/featureImages';
 
 const featureIcons = [QrCode, Smartphone, RefreshCw, Users, Share2, Smartphone];
 
@@ -11,10 +13,17 @@ const TarjetaDigital = forwardRef<HTMLDivElement>((_, ref) => {
   const { language } = useLanguage();
   const t = (key: string) => serviceTranslations[language][key as keyof typeof serviceTranslations['es']] || key;
 
+  // Helper to get localized service path
+  const getServiceHref = (key: string) => {
+    const route = serviceRoutes.find(r => r.key === key);
+    return route ? `/${language}/${route[language]}` : `/${language}`;
+  };
+
   const features = Array.from({ length: 6 }, (_, i) => ({
     title: t(`tarjeta.feature.${i + 1}.title`),
     description: t(`tarjeta.feature.${i + 1}.description`),
     icon: featureIcons[i],
+    image: serviceFeatureImages.tarjetaDigital[i],
   }));
 
   const processSteps = Array.from({ length: 5 }, (_, i) => ({
@@ -28,10 +37,15 @@ const TarjetaDigital = forwardRef<HTMLDivElement>((_, ref) => {
   }));
 
   const relatedServices = [
-    { title: t('tarjeta.relatedService.1'), href: '/diseno-web-app-movil-calgary', icon: Globe },
-    { title: t('tarjeta.relatedService.2'), href: '/branding-estrategia-redes-sociales-calgary', icon: Share2 },
-    { title: t('tarjeta.relatedService.3'), href: '/diseno-software-medida-premium-calgary', icon: Code2 },
+    { title: t('tarjeta.relatedService.1'), href: getServiceHref('webApp'), icon: Globe },
+    { title: t('tarjeta.relatedService.2'), href: getServiceHref('branding'), icon: Share2 },
+    { title: t('tarjeta.relatedService.3'), href: getServiceHref('software'), icon: Code2 },
   ];
+
+  // Canonical URL based on language
+  const canonicalUrl = language === 'es' 
+    ? 'https://www.rcwinnovation.com/es/servicios/tarjeta-digital'
+    : 'https://www.rcwinnovation.com/en/services/digital-business-card';
 
   return (
     <div ref={ref}>
@@ -40,7 +54,7 @@ const TarjetaDigital = forwardRef<HTMLDivElement>((_, ref) => {
         metaTitle={t('tarjeta.metaTitle')}
         metaDescription={t('tarjeta.metaDescription')}
         keywords={t('tarjeta.keywords')}
-        canonicalUrl="https://www.rcwinnovation.com/tarjeta-digital-profesional-calgary"
+        canonicalUrl={canonicalUrl}
         heroImage={serviceDigitalCard}
         heroImageAlt={t('tarjeta.heroImageAlt')}
         tag={t('tarjeta.tag')}

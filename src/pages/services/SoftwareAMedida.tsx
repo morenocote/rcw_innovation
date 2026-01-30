@@ -4,6 +4,8 @@ import { Code2, Layers, Shield, Gauge, Link2, Headphones, Bot, Database, Brain }
 import serviceSoftwareCustom from '@/assets/service-software-custom.jpg';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { serviceTranslations } from '@/i18n/serviceTranslations';
+import { serviceRoutes } from '@/config/routes';
+import { serviceFeatureImages } from '@/config/featureImages';
 
 const featureIcons = [Gauge, Shield, Bot, Layers, Link2, Headphones];
 
@@ -11,10 +13,17 @@ const SoftwareAMedida = forwardRef<HTMLDivElement>((_, ref) => {
   const { language } = useLanguage();
   const t = (key: string) => serviceTranslations[language][key as keyof typeof serviceTranslations['es']] || key;
 
+  // Helper to get localized service path
+  const getServiceHref = (key: string) => {
+    const route = serviceRoutes.find(r => r.key === key);
+    return route ? `/${language}/${route[language]}` : `/${language}`;
+  };
+
   const features = Array.from({ length: 6 }, (_, i) => ({
     title: t(`software.feature.${i + 1}.title`),
     description: t(`software.feature.${i + 1}.description`),
     icon: featureIcons[i],
+    image: serviceFeatureImages.software[i],
   }));
 
   const processSteps = Array.from({ length: 5 }, (_, i) => ({
@@ -28,10 +37,15 @@ const SoftwareAMedida = forwardRef<HTMLDivElement>((_, ref) => {
   }));
 
   const relatedServices = [
-    { title: t('software.relatedService.1'), href: '/automatizaciones-ia-operaciones-calgary', icon: Bot },
-    { title: t('software.relatedService.2'), href: '/sistemas-gestion-operaciones-calgary', icon: Database },
-    { title: t('software.relatedService.3'), href: '/creacion-agentes-ia-inteligencia-calgary', icon: Brain },
+    { title: t('software.relatedService.1'), href: getServiceHref('automatizaciones'), icon: Bot },
+    { title: t('software.relatedService.2'), href: getServiceHref('sistemasGestion'), icon: Database },
+    { title: t('software.relatedService.3'), href: getServiceHref('agentesIA'), icon: Brain },
   ];
+
+  // Canonical URL based on language
+  const canonicalUrl = language === 'es' 
+    ? 'https://www.rcwinnovation.com/es/servicios/software-a-medida'
+    : 'https://www.rcwinnovation.com/en/services/custom-software';
 
   return (
     <div ref={ref}>
@@ -40,7 +54,7 @@ const SoftwareAMedida = forwardRef<HTMLDivElement>((_, ref) => {
         metaTitle={t('software.metaTitle')}
         metaDescription={t('software.metaDescription')}
         keywords={t('software.keywords')}
-        canonicalUrl="https://www.rcwinnovation.com/diseno-software-medida-premium-calgary"
+        canonicalUrl={canonicalUrl}
         heroImage={serviceSoftwareCustom}
         heroImageAlt={t('software.heroImageAlt')}
         tag={t('software.tag')}

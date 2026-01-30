@@ -1,15 +1,17 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Users, Award, Clock, MessageSquare, Star, TrendingUp } from 'lucide-react';
+import { Users, Award, Clock, MessageSquare, Star, TrendingUp, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { sectionRoutes } from '@/config/routes';
 
 const reasonIcons = [Users, Award, Clock, MessageSquare, Star, TrendingUp];
 
 export const WhyUs = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const reasons = Array.from({ length: 6 }, (_, i) => {
     const num = i + 1;
@@ -51,14 +53,22 @@ export const WhyUs = () => {
           </h2>
           
           {/* Mobile Description */}
-          <div className="md:hidden text-muted-foreground max-w-xl mx-auto text-sm sm:text-base leading-relaxed whitespace-pre-line px-2">
+          <div className="md:hidden text-muted-foreground max-w-xl mx-auto text-sm sm:text-base leading-relaxed whitespace-pre-line px-2 mb-4">
             {descriptionMobile}
           </div>
           
           {/* Desktop Description */}
-          <div className="hidden md:block text-muted-foreground max-w-4xl mx-auto text-base lg:text-lg leading-relaxed whitespace-pre-line text-left">
+          <div className="hidden md:block text-muted-foreground max-w-4xl mx-auto text-base lg:text-lg leading-relaxed whitespace-pre-line text-left mb-6">
             {descriptionDesktop}
           </div>
+
+          <Link 
+            to={`/${language}/${sectionRoutes.whyUs[language]}`}
+            className="inline-flex items-center gap-2 text-accent hover:underline font-medium"
+          >
+            {language === 'es' ? 'Conoce más sobre nosotros' : 'Learn more about us'}
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </motion.div>
 
         {/* Reasons Grid */}

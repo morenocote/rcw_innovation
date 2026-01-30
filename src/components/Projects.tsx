@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { ArrowUpRight, ExternalLink } from 'lucide-react';
+import { ArrowUpRight, ExternalLink, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { sectionRoutes } from '@/config/routes';
 
 import projectServiciosLatinos from '@/assets/project-servicios-latinos.jpg';
 import projectAiChatbot from '@/assets/project-ai-chatbot.jpg';
@@ -13,10 +15,26 @@ const projectImages = [projectServiciosLatinos, projectAiChatbot, projectEcommer
 const projectResults = ['#1', '2.8×', '+38%', '-31%'];
 const projectLinks = ['https://servicioslatinoscanada.com/', undefined, undefined, undefined];
 
+// SEO-optimized alt descriptions for project images
+const projectAlts = {
+  es: [
+    'Marketplace Servicios Latinos Canadá - Primera plataforma web para comunidad hispana Calgary',
+    'Suite de automatización con inteligencia artificial CRM y agentes IA para ventas',
+    'E-commerce headless con SEO técnico avanzado y analítica para ventas orgánicas',
+    'Plataforma de gestión empresarial con dashboards en tiempo real ERP Calgary'
+  ],
+  en: [
+    'Servicios Latinos Canada Marketplace - First web platform for Hispanic community Calgary',
+    'AI automation suite with CRM integration and AI agents for sales',
+    'Headless e-commerce with advanced technical SEO and analytics for organic sales',
+    'Enterprise management platform with real-time dashboards ERP Calgary'
+  ]
+};
+
 export const Projects = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const projects = Array.from({ length: 4 }, (_, i) => {
     const num = i + 1;
@@ -28,6 +46,7 @@ export const Projects = () => {
       resultLabel: t(`project.${num}.resultLabel`),
       tags: t(`project.${num}.tags`).split(','),
       link: projectLinks[i],
+      alt: projectAlts[language][i],
     };
   });
 
@@ -49,9 +68,16 @@ export const Projects = () => {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mt-4 mb-6">
             {t('projects.title')}
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+          <p className="text-muted-foreground max-w-2xl mx-auto text-lg mb-6">
             {t('projects.subtitle')}
           </p>
+          <Link 
+            to={`/${language}/${sectionRoutes.projects[language]}`}
+            className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
+          >
+            {language === 'es' ? 'Ver todos los casos de éxito' : 'View all success stories'}
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </motion.div>
 
         {/* Projects Grid */}
@@ -80,8 +106,9 @@ export const Projects = () => {
               <div className="relative w-full h-40 rounded-xl overflow-hidden mb-4">
                 <img 
                   src={project.image} 
-                  alt={project.title}
+                  alt={project.alt}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
               </div>

@@ -16,6 +16,7 @@ interface ServiceFeature {
   title: string;
   description: string;
   icon: LucideIcon;
+  image?: string;
 }
 
 interface PricingPlan {
@@ -349,13 +350,26 @@ export const ServicePageLayout = ({
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
-                    className="glass-strong p-8 rounded-2xl group hover:border-primary/30 transition-all duration-300"
+                    className="glass-strong rounded-2xl group hover:border-primary/30 transition-all duration-300 overflow-hidden"
                   >
-                    <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-                      <feature.icon className="w-7 h-7 text-primary" />
+                    {/* Feature Image */}
+                    {feature.image && (
+                      <div className="relative h-36 overflow-hidden">
+                        <img 
+                          src={feature.image} 
+                          alt={feature.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
+                      </div>
+                    )}
+                    <div className="p-6">
+                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                        <feature.icon className="w-6 h-6 text-primary" />
+                      </div>
+                      <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                      <p className="text-sm text-muted-foreground">{feature.description}</p>
                     </div>
-                    <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                    <p className="text-muted-foreground">{feature.description}</p>
                   </motion.div>
                 ))}
               </div>

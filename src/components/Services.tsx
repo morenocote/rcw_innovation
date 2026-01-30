@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { serviceRoutes } from '@/config/routes';
 
 import serviceSoftwareCustom from '@/assets/service-software-custom.jpg';
 import serviceBrandingSocial from '@/assets/service-branding-social.jpg';
@@ -37,15 +38,16 @@ const serviceImages = [
   serviceMentoringTraining,
 ];
 
-const serviceHrefs = [
-  '/diseno-software-medida-premium-calgary',
-  '/branding-estrategia-redes-sociales-calgary',
-  '/automatizaciones-ia-operaciones-calgary',
-  '/creacion-agentes-ia-inteligencia-calgary',
-  '/sistemas-gestion-operaciones-calgary',
-  '/tarjeta-digital-profesional-calgary',
-  '/diseno-web-app-movil-calgary',
-  '/mentoria-capacitacion-digital-calgary',
+// Map service keys to their index for consistent ordering
+const serviceKeyOrder = [
+  'software',
+  'branding', 
+  'automatizaciones',
+  'agentesIA',
+  'sistemasGestion',
+  'tarjetaDigital',
+  'webApp',
+  'mentoria',
 ];
 
 const containerVariants = {
@@ -75,10 +77,37 @@ interface ServicesProps {
 export const Services = ({ onOpenConsultation, onOpenDiagnostic }: ServicesProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const { t, basePath, language } = useLanguage();
+  const { t, language } = useLanguage();
 
-  const services = Array.from({ length: 8 }, (_, i) => {
+  // SEO-optimized alt descriptions for service images
+  const serviceAlts = {
+    es: [
+      'Desarrollo de software a medida - Arquitecturas modulares y APIs Calgary',
+      'Branding y estrategia redes sociales - Marketing digital Calgary',
+      'Automatizaciones con inteligencia artificial - Workflows integrados CRM',
+      'Creación de agentes IA conversacionales - Aprendizaje automático Calgary',
+      'Sistemas de gestión ERP CRM - Dashboards en tiempo real Calgary',
+      'Tarjeta digital profesional QR NFC - Networking Calgary',
+      'Diseño web y aplicaciones móviles PWA - SEO técnico Calgary',
+      'Mentoría y capacitación digital - IA productividad automatización'
+    ],
+    en: [
+      'Custom software development - Modular architectures and APIs Calgary',
+      'Branding and social media strategy - Digital marketing Calgary',
+      'AI automations - Integrated CRM workflows Calgary',
+      'AI conversational agents creation - Machine learning Calgary',
+      'ERP CRM management systems - Real-time dashboards Calgary',
+      'Professional digital business card QR NFC - Networking Calgary',
+      'Web design and mobile PWA applications - Technical SEO Calgary',
+      'Digital mentoring and training - AI productivity automation'
+    ]
+  };
+
+  const services = serviceKeyOrder.map((key, i) => {
     const num = i + 1;
+    const route = serviceRoutes.find(r => r.key === key);
+    const href = route ? `/${language}/${route[language]}` : `/${language}`;
+    
     return {
       icon: serviceIcons[i],
       title: t(`service.${num}.title`),
@@ -86,8 +115,8 @@ export const Services = ({ onOpenConsultation, onOpenDiagnostic }: ServicesProps
       description: t(`service.${num}.description`),
       features: t(`service.${num}.features`).split(','),
       image: serviceImages[i],
-      imageAlt: t(`service.${num}.title`) + ' - Calgary',
-      href: serviceHrefs[i],
+      imageAlt: serviceAlts[language][i],
+      href,
     };
   });
 
@@ -104,13 +133,13 @@ export const Services = ({ onOpenConsultation, onOpenDiagnostic }: ServicesProps
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="text-primary text-sm font-semibold tracking-wider uppercase">
+          <span className="text-primary text-xs sm:text-sm font-semibold tracking-wider uppercase">
             {t('services.badge')}
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mt-4 mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mt-3 sm:mt-4 mb-4 sm:mb-6">
             {t('services.title')}
           </h2>
-          <p className="text-muted-foreground max-w-3xl mx-auto text-lg">
+          <p className="text-muted-foreground max-w-3xl mx-auto text-base sm:text-lg">
             {t('services.subtitle')}
           </p>
         </motion.div>
@@ -120,7 +149,7 @@ export const Services = ({ onOpenConsultation, onOpenDiagnostic }: ServicesProps
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
         >
           {services.map((service) => (
             <motion.article
@@ -128,13 +157,14 @@ export const Services = ({ onOpenConsultation, onOpenDiagnostic }: ServicesProps
               variants={itemVariants}
               className="card-premium group cursor-pointer overflow-hidden"
             >
-              <Link to={`${basePath}${service.href}`} className="block h-full">
+              <Link to={service.href} className="block h-full">
                 {/* Service Image */}
                 <div className="relative h-40 -mx-6 -mt-6 mb-4 overflow-hidden">
                   <img 
                     src={service.image} 
                     alt={service.imageAlt}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
                   {/* Tag positioned on image */}

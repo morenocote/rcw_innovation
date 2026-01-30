@@ -4,6 +4,8 @@ import { Globe, Search, ShoppingCart, Smartphone, CreditCard, Gauge, Share2, Gra
 import serviceWebAppDesign from '@/assets/service-web-app-design.jpg';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { serviceTranslations } from '@/i18n/serviceTranslations';
+import { serviceRoutes } from '@/config/routes';
+import { serviceFeatureImages } from '@/config/featureImages';
 
 const featureIcons = [Search, ShoppingCart, Smartphone, Gauge, CreditCard, Globe];
 
@@ -11,10 +13,17 @@ const DisenoWebApp = forwardRef<HTMLDivElement>((_, ref) => {
   const { language } = useLanguage();
   const t = (key: string) => serviceTranslations[language][key as keyof typeof serviceTranslations['es']] || key;
 
+  // Helper to get localized service path
+  const getServiceHref = (key: string) => {
+    const route = serviceRoutes.find(r => r.key === key);
+    return route ? `/${language}/${route[language]}` : `/${language}`;
+  };
+
   const features = Array.from({ length: 6 }, (_, i) => ({
     title: t(`webApp.feature.${i + 1}.title`),
     description: t(`webApp.feature.${i + 1}.description`),
     icon: featureIcons[i],
+    image: serviceFeatureImages.webApp[i],
   }));
 
   const processSteps = Array.from({ length: 5 }, (_, i) => ({
@@ -28,10 +37,15 @@ const DisenoWebApp = forwardRef<HTMLDivElement>((_, ref) => {
   }));
 
   const relatedServices = [
-    { title: t('webApp.relatedService.1'), href: '/branding-estrategia-redes-sociales-calgary', icon: Share2 },
-    { title: t('webApp.relatedService.2'), href: '/mentoria-capacitacion-digital-calgary', icon: GraduationCap },
-    { title: t('webApp.relatedService.3'), href: '/automatizaciones-ia-operaciones-calgary', icon: Bot },
+    { title: t('webApp.relatedService.1'), href: getServiceHref('branding'), icon: Share2 },
+    { title: t('webApp.relatedService.2'), href: getServiceHref('mentoria'), icon: GraduationCap },
+    { title: t('webApp.relatedService.3'), href: getServiceHref('automatizaciones'), icon: Bot },
   ];
+
+  // Canonical URL based on language
+  const canonicalUrl = language === 'es' 
+    ? 'https://www.rcwinnovation.com/es/servicios/diseno-web-app'
+    : 'https://www.rcwinnovation.com/en/services/web-app-design';
 
   return (
     <div ref={ref}>
@@ -40,7 +54,7 @@ const DisenoWebApp = forwardRef<HTMLDivElement>((_, ref) => {
         metaTitle={t('webApp.metaTitle')}
         metaDescription={t('webApp.metaDescription')}
         keywords={t('webApp.keywords')}
-        canonicalUrl="https://www.rcwinnovation.com/diseno-web-app-movil-calgary"
+        canonicalUrl={canonicalUrl}
         heroImage={serviceWebAppDesign}
         heroImageAlt={t('webApp.heroImageAlt')}
         tag={t('webApp.tag')}

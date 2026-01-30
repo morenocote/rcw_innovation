@@ -4,6 +4,8 @@ import { Brain, MessageSquare, Eye, TrendingUp, Shield, Zap, Bot, Database, Code
 import serviceAgentsAi from '@/assets/service-agents-ai.jpg';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { serviceTranslations } from '@/i18n/serviceTranslations';
+import { serviceRoutes } from '@/config/routes';
+import { serviceFeatureImages } from '@/config/featureImages';
 
 const featureIcons = [MessageSquare, Eye, TrendingUp, Shield, Zap, Brain];
 
@@ -11,10 +13,17 @@ const AgentesIAAvanzados = forwardRef<HTMLDivElement>((_, ref) => {
   const { language } = useLanguage();
   const t = (key: string) => serviceTranslations[language][key as keyof typeof serviceTranslations['es']] || key;
 
+  // Helper to get localized service path
+  const getServiceHref = (key: string) => {
+    const route = serviceRoutes.find(r => r.key === key);
+    return route ? `/${language}/${route[language]}` : `/${language}`;
+  };
+
   const features = Array.from({ length: 6 }, (_, i) => ({
     title: t(`agentesAvanzados.feature.${i + 1}.title`),
     description: t(`agentesAvanzados.feature.${i + 1}.description`),
     icon: featureIcons[i],
+    image: serviceFeatureImages.agentesIAAvanzados[i],
   }));
 
   const processSteps = Array.from({ length: 5 }, (_, i) => ({
@@ -39,10 +48,15 @@ const AgentesIAAvanzados = forwardRef<HTMLDivElement>((_, ref) => {
   }));
 
   const relatedServices = [
-    { title: t('agentesAvanzados.relatedService.1'), href: '/automatizaciones-ia-operaciones-calgary', icon: Bot },
-    { title: t('agentesAvanzados.relatedService.2'), href: '/sistemas-gestion-operaciones-calgary', icon: Database },
-    { title: t('agentesAvanzados.relatedService.3'), href: '/diseno-software-medida-premium-calgary', icon: Code2 },
+    { title: t('agentesAvanzados.relatedService.1'), href: getServiceHref('automatizaciones'), icon: Bot },
+    { title: t('agentesAvanzados.relatedService.2'), href: getServiceHref('sistemasGestion'), icon: Database },
+    { title: t('agentesAvanzados.relatedService.3'), href: getServiceHref('software'), icon: Code2 },
   ];
+
+  // Canonical URL based on language
+  const canonicalUrl = language === 'es' 
+    ? 'https://www.rcwinnovation.com/es/servicios/agentes-ia-avanzados'
+    : 'https://www.rcwinnovation.com/en/services/advanced-ai-agents';
 
   return (
     <div ref={ref}>
@@ -51,7 +65,7 @@ const AgentesIAAvanzados = forwardRef<HTMLDivElement>((_, ref) => {
         metaTitle={t('agentesAvanzados.metaTitle')}
         metaDescription={t('agentesAvanzados.metaDescription')}
         keywords={t('agentesAvanzados.keywords')}
-        canonicalUrl="https://www.rcwinnovation.com/agentes-ia-avanzados-calgary"
+        canonicalUrl={canonicalUrl}
         heroImage={serviceAgentsAi}
         heroImageAlt={t('agentesAvanzados.heroImageAlt')}
         tag={t('agentesAvanzados.tag')}

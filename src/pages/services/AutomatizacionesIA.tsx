@@ -4,6 +4,8 @@ import { Bot, Workflow, Clock, DollarSign, Link2, TrendingUp, Brain, Database, C
 import serviceAutomationAi from '@/assets/service-automation-ai.jpg';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { serviceTranslations } from '@/i18n/serviceTranslations';
+import { serviceRoutes } from '@/config/routes';
+import { serviceFeatureImages } from '@/config/featureImages';
 
 const featureIcons = [Workflow, Clock, DollarSign, Link2, TrendingUp, Headphones];
 
@@ -11,10 +13,17 @@ const AutomatizacionesIA = forwardRef<HTMLDivElement>((_, ref) => {
   const { language } = useLanguage();
   const t = (key: string) => serviceTranslations[language][key as keyof typeof serviceTranslations['es']] || key;
 
+  // Helper to get localized service path
+  const getServiceHref = (key: string) => {
+    const route = serviceRoutes.find(r => r.key === key);
+    return route ? `/${language}/${route[language]}` : `/${language}`;
+  };
+
   const features = Array.from({ length: 6 }, (_, i) => ({
     title: t(`automatizaciones.feature.${i + 1}.title`),
     description: t(`automatizaciones.feature.${i + 1}.description`),
     icon: featureIcons[i],
+    image: serviceFeatureImages.automatizaciones[i],
   }));
 
   const processSteps = Array.from({ length: 5 }, (_, i) => ({
@@ -28,10 +37,15 @@ const AutomatizacionesIA = forwardRef<HTMLDivElement>((_, ref) => {
   }));
 
   const relatedServices = [
-    { title: t('automatizaciones.relatedService.1'), href: '/creacion-agentes-ia-inteligencia-calgary', icon: Brain },
-    { title: t('automatizaciones.relatedService.2'), href: '/sistemas-gestion-operaciones-calgary', icon: Database },
-    { title: t('automatizaciones.relatedService.3'), href: '/diseno-software-medida-premium-calgary', icon: Code2 },
+    { title: t('automatizaciones.relatedService.1'), href: getServiceHref('agentesIA'), icon: Brain },
+    { title: t('automatizaciones.relatedService.2'), href: getServiceHref('sistemasGestion'), icon: Database },
+    { title: t('automatizaciones.relatedService.3'), href: getServiceHref('software'), icon: Code2 },
   ];
+
+  // Canonical URL based on language
+  const canonicalUrl = language === 'es' 
+    ? 'https://www.rcwinnovation.com/es/servicios/automatizaciones-ia'
+    : 'https://www.rcwinnovation.com/en/services/ai-automations';
 
   return (
     <div ref={ref}>
@@ -40,7 +54,7 @@ const AutomatizacionesIA = forwardRef<HTMLDivElement>((_, ref) => {
         metaTitle={t('automatizaciones.metaTitle')}
         metaDescription={t('automatizaciones.metaDescription')}
         keywords={t('automatizaciones.keywords')}
-        canonicalUrl="https://www.rcwinnovation.com/automatizaciones-ia-operaciones-calgary"
+        canonicalUrl={canonicalUrl}
         heroImage={serviceAutomationAi}
         heroImageAlt={t('automatizaciones.heroImageAlt')}
         tag={t('automatizaciones.tag')}
